@@ -108,7 +108,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # Alias's for SSH
 # alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORTNUMBERHERE'
 
-
+function san() { ssh -p 8022 u0_a119@$1; }
 
 # Alias's to mount ISO files
 # mount -o loop /home/NAMEOFISO.iso /home/ISOMOUNTDIR/
