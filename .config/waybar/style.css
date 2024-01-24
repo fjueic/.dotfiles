@@ -55,7 +55,6 @@ button:hover {
 }
 
 #clock,
-#battery,
 #cpu,
 #memory,
 #disk,
@@ -103,12 +102,16 @@ button:hover {
 
 #battery.critical:not(.charging) {
     /* background-color: #f53c3c; */
-    color: #ffffff;
+    color: #ff0000;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+#battery.charging {
+    color: #5fa92b;
 }
 
 #cpu {
