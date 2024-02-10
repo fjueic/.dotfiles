@@ -88,20 +88,13 @@ button:hover {
     margin-right: 0;
 }
 
-#battery {
-    /* background-color: #ffffff; */
-    color: #fff;
-}
-
 @keyframes blink {
     to {
-        /* background-color: #ffffff; */
         color: #000000;
     }
 }
 
 #battery.critical:not(.charging) {
-    /* background-color: #f53c3c; */
     color: #ff0000;
     animation-name: blink;
     animation-duration: 0.5s;
@@ -114,33 +107,35 @@ button:hover {
     color: #5fa92b;
 }
 
+#battery:not(.charging) {
+    color: #ffffff; /* default color */
+}
+
+#battery.full {
+    color: #2a5c45;
+}
+
 #cpu {
-    /* background-color: #2ecc71; */
     color: #fff;
 }
 
 #network {
-    /* background-color: #2980b9; */
     color: #fff;
 }
 
 #pulseaudio {
-    /* background-color: #f1c40f; */
     color: #fff;
 }
 
 #pulseaudio.muted {
-    /* background-color: #90b1b1; */
     color: #2a5c45;
 }
 
 #wireplumber {
-    /* background-color: #fff0f5; */
     color: #000000;
 }
 
 #custom-media {
-    /* background-color: #66cc99; */
     color: #2a5c45;
     min-width: 100px;
 }
@@ -150,15 +145,12 @@ button:hover {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    /* background-color: #eb4d4b; */
 }
 
 #idle_inhibitor.activated {
-    /* background-color: #ecf0f1; */
     color: #2d3436;
 }
 
 #mpd {
-    /* background-color: #66cc99; */
     color: #2a5c45;
 }

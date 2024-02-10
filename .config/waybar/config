@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["hyprland/workspaces", "tray"],
     "modules-center": ["clock","hyprland/window"],
-    "modules-right": ["custom/cliphist","bluetooth","idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery#bat2","battery"],
+    "modules-right": ["custom/cliphist","bluetooth","idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -56,9 +56,6 @@
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°"
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
