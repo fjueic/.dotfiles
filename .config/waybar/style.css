@@ -13,7 +13,7 @@ window#waybar {
 }
 
 window#waybar.empty {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 button {
@@ -24,11 +24,6 @@ button {
     border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-button:hover {
-    background: inherit;
-}
-
 #workspaces button {
     padding: 0 5px;
     background-color: transparent;
@@ -37,7 +32,7 @@ button:hover {
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 1);
+    background: rgba(0, 0, 0, 0);
 }
 
 #workspaces button.focused {
