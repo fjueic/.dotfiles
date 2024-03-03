@@ -109,6 +109,11 @@ alias cls='clear'
 
 alias neofetch='neofetch --kitty --source ~/Pictures/neofetch.png'
 
+# firefox developer edition
+alias firefox='firefox-developer-edition'
+
+
+
 # Change directory aliases
 alias home='cd ~'
 alias cd..='cd ..'
