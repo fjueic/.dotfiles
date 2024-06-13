@@ -1,0 +1,8 @@
+{
+	"<": [
+		{ "10": "notify-send -u critical 'Battery' 'Battery level is below 10%'" },
+		{ "5": "notify-send -u critical 'Battery' 'Battery level is below 5%'" }
+	],
+	"==": [{ "100": "notify-send  'Battery' 'Battery level is 100%'" }],
+	">": []
+}
