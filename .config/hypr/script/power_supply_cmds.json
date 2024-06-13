@@ -1,0 +1,4 @@
+{
+  "online": ["notify-send -i battery-charging-symbolic 'Power Supply Online'"],
+  "offline": ["notify-send -i battery-empty-symbolic 'Power Supply Offline'"]
+}

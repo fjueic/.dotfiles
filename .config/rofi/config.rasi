@@ -1,0 +1,66 @@
+configuration {
+    show-icons:      true;
+    display-drun:    "";
+    disable-history: false;
+}
+
+* {
+    foreground: #f8f8f2;
+    background-color: #000000;
+    active-background: #6272a4;
+    urgent-background: #ff5555;
+    urgent-foreground: #282a36;
+    selected-background: @active-background;
+    selected-urgent-background: @urgent-background;
+    selected-active-background: @active-background;
+    separatorcolor: @active-background;
+    bordercolor: @active-background;
+}
+
+#window {
+    background-color: @background-color;
+    padding:          15;
+}
+#mainbox {
+    padding: 0;
+}
+#message {
+    border:       0px;
+    border-color: @separatorcolor;
+    padding:      1px;
+}
+#textbox {
+    text-color: @foreground;
+}
+#listview {
+    fixed-height: 0;
+    border:       0px;
+    border-color: @bordercolor;
+    spacing:      2px ;
+    scrollbar:    false;
+    padding:      2px 0px 0px ;
+}
+#element {
+    border:  0;
+    padding: 3px ;
+}
+#element.normal.normal {
+    background-color: @background-color;
+    text-color:       @foreground;
+}
+#element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+#element.normal.active {
+    background-color: @active-background;
+    text-color:       @foreground;
+}
+#element.selected.normal {
+    background-color: #9B3E55;
+    text-color:       @foreground;
+}
+#element.alternate.normal {
+    background-color: @background-color;
+    text-color:       @foreground;
+}
