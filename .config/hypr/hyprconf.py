@@ -25,7 +25,8 @@ conf.add_via_primitive(
         },
         'kb_options':[ 'ctrl:swapcaps'],
         # 'kb_options':[ 'altwin:swap_alt_win'],
-        'sensitivity':[0 ]
+        # 'kb_options' : ['caps:ctrl_modifier'],
+        'sensitivity':[0]
     },
     general = {
         'gaps_in':[ 0],
@@ -36,10 +37,18 @@ conf.add_via_primitive(
         'layout':[ 'dwindle'],
         'allow_tearing':[ 'false'],
     },
+    windowrulev2 = [
+        # ["opacity 0.95 0.95 1, title:.*"],
+        ["opacity 0.95 0.95 1, title:.*foot*."],
+    ],
     decoration = {
         'blur': {
-            'enabled':[ 0],
-        }
+            'enabled':[ 1],
+            'size' : [3],
+        'passes' : [1],
+        'vibrancy' : [0.1696],
+        },
+        'fullscreen_opacity':[1],
     },
     animations = {
         'enabled':[ 0],
@@ -58,12 +67,16 @@ conf.add_via_primitive(
         'vfr':[ 'true'],
     }
 )
+def hyprshade():
+    import subprocess
+    command = ["bash", "-c", "sleep 1;hyprshade on blue-light-filter"]
+    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
 config = Hyprlang( '/tmp/hyprlang/hyprland.conf',__file__)
+conf.add_side_effect(hyprshade)
 import hyprbinds, hyprExecOnce
 config.add(conf)
 config.add(hyprbinds.config)
 config.add(hyprExecOnce.config)
-
 
 if __name__ == '__main__':
     config.write()

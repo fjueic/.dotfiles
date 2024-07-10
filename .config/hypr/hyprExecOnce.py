@@ -1,14 +1,10 @@
 from Hyprlang import *
 
 config = Hyprlang_config(__file__)
-def blue_light_filter():
-    from os import system
-    system("hyprshade on blue-light-filter")
-config.add_side_effect(blue_light_filter)
 config.add_via_primitive(
     **{"exec-once": [
         # lock on boot
-        ["hyprlock || hyprctl dispatch exit"],
+        ["[ -f /tmp/hyprlang/hyprlock.conf ] && (hyprlock || hyprctl dispatch exit)"],
         # create virtual monitor
         ["hyprctl output create headless"],
         # wayvnc
@@ -16,7 +12,7 @@ config.add_via_primitive(
         # hypridle
         ["(killall hypridle || true) && hypridle"],
         ["(pidof waybar || waybar)"],
-        ["(pidof hyprpaper|| hyprpaper)"],
+        ["(pidof hyprpaper || [ -f /tmp/hyprlang/hyprpaper.conf ] && hyprpaper)"],
         ["/usr/lib/polkit-kde-authentication-agent-1"],
         ["gnome-keyring-daemon --start --components=secrets"],
         ["blueman-applet"],
@@ -38,5 +34,9 @@ config.add_via_primitive(
         ["pidof syncthing || syncthing -no-browser"],
         # hyprshades
         ["hyprshade on blue-light-filter"],
+        # will name later
+        ["cd ~/.config/hypr/ && python hypridle.py"],
+        ["cd ~/.config/hypr/ && python hyprlock.py"],
+        ["cd ~/.config/hypr/ && python hyprpaper.py"],
 ]})
 

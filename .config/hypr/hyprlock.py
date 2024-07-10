@@ -53,6 +53,9 @@ config = Hyprlang('/tmp/hyprlang/hyprlock.conf', __file__)
 config.add(conf)
 if __name__ == '__main__':
     config.write()
+    import subprocess
+    command = ["bash", "-c", "[ -f /tmp/hyprlang/hyprlock.conf ] && (hyprlock || hyprctl dispatch exit)"]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
     config.watch()
     from time import sleep
     sleep(10**9)

@@ -3,6 +3,7 @@ from Hyprlang import *
 config = Hyprlang_config(__file__)
 mainMod = 'SUPER'
 terminal = 'foot'
+# terminal = 'kitty'
 fileManager = 'nautilus'
 menu = f'rofi -terminal {terminal} -show drun'
 
@@ -170,3 +171,4 @@ config.add_via_primitive(
         [mainMod, 'space', 'exec', 'pidof waybar >/dev/null && killall waybar || waybar'],
     ]
 )
+
