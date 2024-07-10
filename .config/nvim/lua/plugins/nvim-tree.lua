@@ -14,6 +14,11 @@ return {
 				update_cwd = false,
 				ignore_list = {},
 			},
+			git = {
+				enable =true,
+				ignore = false,
+				timeout = 500,
+			},
 			renderer = {
 				indent_markers = {
 					enable = true,

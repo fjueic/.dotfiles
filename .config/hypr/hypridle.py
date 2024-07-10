@@ -28,5 +28,8 @@ config.add(conf)
 if __name__ == '__main__':
     config.write()
     config.watch()
+    import subprocess
+    command = ["bash", "-c", "(killall hypridle || true) && hypridle"]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
     from time import sleep
     sleep(10**9)

@@ -10,4 +10,5 @@ else
     grim -g "0,0 1920x1080" "$image_path"
 fi
 
+echo "$image_path" | wl-copy # Copy image path to clipboard
 wl-copy < "$image_path"
