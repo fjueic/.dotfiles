@@ -2,7 +2,6 @@
 vim.api.nvim_command("autocmd FileType markdown setlocal conceallevel=2")
 
 -- vim.api.nvim_set_keymap("i", "jj", "<Esc>", { noremap = true })
-vim.api.nvim_set_keymap("n", ";", ":", { noremap = true })
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
