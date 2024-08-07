@@ -22,6 +22,11 @@ conf.add_config_entries(
         # 'kb_options' : 'caps:ctrl_modifier',
         "sensitivity": 0,
     },
+    cursor={
+        "inactive_timeout": 10,
+        "zoom_factor": 1,
+        "hide_on_key_press": 1,
+    },
     general={
         "gaps_in": 0,
         "gaps_out": 0,

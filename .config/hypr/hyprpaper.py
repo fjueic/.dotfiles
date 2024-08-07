@@ -6,7 +6,6 @@ wallpaper = "/home/minoru/Desktop/wallpapers/dragonball/340761.jpg"
 # wallpaper = '/home/minoru/Desktop/wallpapers/nino/anm7425.jpg'
 wallpaper = "/home/minoru/Desktop/wallpapers/cote/1716129018-removebg.png"
 
-splash = 0
 monitor = ""
 
 

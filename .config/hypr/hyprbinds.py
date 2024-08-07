@@ -127,6 +127,7 @@ config.add_config_entries(
         (mainMod, "END", "exec", "systemctl reboot"),
         (mainMod, "PAGE_DOWN", "exec", "systemctl suspend"),
         (mainMod, "PAGE_UP", "exec", "loginctl lock-session"),
+        (mainMod, "INSERT", "forcerendererreload"),
     ]
 )
 
@@ -188,7 +189,32 @@ config.add_config_entries(
 # display on and off
 config.add_config_entries(
     bindl=[
-        (mainMod, "d", "exec", "hyprctl dispatch dpms off"),
-        (mainMod, "u", "exec", "hyprctl dispatch dpms on"),
+        (mainMod, "d", "exec", "sleep 1 && hyprctl dispatch dpms off"),
+        (mainMod, "u", "exec", "sleep 1 && hyprctl dispatch dpms on"),
+    ],
+)
+
+# zoom
+get_zoom = "hyprctl getoption cursor:zoom_factor | grep float"
+notifier_zoom = get_zoom + " | awk '{print $2}'" " | xargs notify-send -t 1000"
+# out: float: some_float
+zoom_in = (
+    f"{get_zoom} | awk "
+    "'"
+    '{ system("hyprctl keyword cursor:zoom_factor " $2 + 0.1) }'
+    "'"
+)
+
+zoom_out = (
+    f"{get_zoom} | awk "
+    "'"
+    '{if($2!=1) system("hyprctl keyword cursor:zoom_factor " $2 - 0.1) }'
+    "'"
+)
+
+config.add_config_entries(
+    binde=[
+        (mainMod, "minus", "exec", zoom_out + " && " + notifier_zoom),
+        (mainMod, "equal", "exec", zoom_in + " && " + notifier_zoom),
     ]
 )
