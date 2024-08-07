@@ -1,7 +1,7 @@
 from Hyprlang import *
 
 conf = Hyprlang_config(__file__)
-conf.add_via_primitive(
+conf.add_config_entries(
     general={
         "lock_cmd": "pidof hyprlock ||  hyprlock",
         "unlock_cmd": "pkill -USR1 hyprlock",
