@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/code/chat-app/ ~/code/assignments/ ~/.config/ ~/code ~/ -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find  ~/.config/ ~/code ~/ -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then

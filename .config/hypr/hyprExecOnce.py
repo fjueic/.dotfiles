@@ -14,7 +14,7 @@ config.add_config_entries(
             "(killall hypridle || true) && hypridle",
             "(pidof waybar || waybar)",
             "(pidof hyprpaper || [ -f /tmp/hyprlang/hyprpaper.conf ] && hyprpaper)",
-            "/usr/lib/polkit-kde-authentication-agent-1",
+            # "/usr/lib/polkit-kde-authentication-agent-1",
             "gnome-keyring-daemon --start --components=secrets",
             "blueman-applet",
             "nm-applet --indicator",

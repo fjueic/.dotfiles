@@ -54,14 +54,14 @@ config.add_config_entries(
 )
 
 config.add_config_entries(
-    bind=[
+    bindl=[
         # change wallpaper between static and video
-        (
-            f"{mainMod} SHIFT",
-            "C",
-            "exec",
-            '(pidof mpvpaper > /dev/null && killall mpvpaper && notify-send "Wallpaper changed to static") || (notify-send "Wallpaper changed to video" && mpvpaper -o "no-audio loop-file=\'inf\'" "*" \'/home/minoru/Desktop/wallpapers/yoimiya/1 [ZimHFN2wdEE].mkv\' &)',
-        ),
+        # (
+        #     f"{mainMod} SHIFT",
+        #     "C",
+        #     "exec",
+        #     '(pidof mpvpaper > /dev/null && killall mpvpaper && notify-send "Wallpaper changed to static") || (notify-send "Wallpaper changed to video" && mpvpaper -o "no-audio loop-file=\'inf\'" "*" \'/home/minoru/Desktop/wallpapers/yoimiya/1 [ZimHFN2wdEE].mkv\' &)',
+        # ),
         # ScreenShot with print
         (
             "",

@@ -1,8 +1,8 @@
 from Hyprlang import *
 
 conf = Hyprlang_config(__file__)
-wallpaper = "/home/minoru/Desktop/wallpapers/kana/0127_girl-rain-koba-sewer.jpg"
-wallpaper = "/home/minoru/Desktop/wallpapers/yoimiya/Yoimiya.full.3456712.png"
+wallpaper = '/home/minoru/Desktop/jjk/sukuna-yuji-itadori-jujutsu-kaisen-4k-wallpaper-uhdpaper.com-593@0@e.jpg'
+# wallpaper = '/home/minoru/Desktop/jjk/sukuna-itadori-jujutsu-kaisen-4k-wallpaper-uhdpaper.com-194@2@a.jpg'
 
 text_color = RGBA(255, 255, 255, 1)
 monitor = {"monitor": [""]}
@@ -22,8 +22,7 @@ conf.add_config_entries(
     general={
         "no_fade_in": 1,
         "no_fade_out": 1,
-    },
-    background={
+    }, background={
         **monitor,
         "path": wallpaper,
         "color": RGBA(25, 20, 20, 1.0),
