@@ -1,10 +1,7 @@
 from Hyprlang import *
 
 conf = Hyprlang_config(__file__)
-wallpaper = "/home/minoru/Desktop/wallpapers/dragonball/340761.jpg"
-# wallpaper = '/home/minoru/Desktop/wallpapers/nino/422032131_747881310246515_8129172224054620694_n(1).jpg'
-# wallpaper = '/home/minoru/Desktop/wallpapers/nino/anm7425.jpg'
-wallpaper = "/home/minoru/Desktop/wallpapers/cote/1716129018-removebg.png"
+wallpaper = "/home/minoru/Desktop/yoimiya/yoimiya-genshin-impact-art-4k-wallpaper-3840x2160-uhdpaper.com-932.1_a.jpg"
 
 monitor = ""
 

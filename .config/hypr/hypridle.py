@@ -1,6 +1,18 @@
 from Hyprlang import *
 
 conf = Hyprlang_config(__file__)
+def restart_hypridle():
+    import subprocess
+
+    command = ["bash", "-c", "(killall hypridle || true) && hypridle"]
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        close_fds=True,
+    )
+conf.add_side_effect(restart_hypridle)
 conf.add_config_entries(
     general={
         "lock_cmd": "pidof hyprlock ||  hyprlock",
@@ -29,16 +41,7 @@ config.add(conf)
 if __name__ == "__main__":
     config.write()
     config.watch()
-    import subprocess
-
-    command = ["bash", "-c", "(killall hypridle || true) && hypridle"]
-    process = subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        close_fds=True,
-    )
+    restart_hypridle()
     from time import sleep
 
     sleep(10**9)
