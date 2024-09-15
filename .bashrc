@@ -158,7 +158,7 @@ export PATH=$PATH:"$HOME/.config/hypr/script"
 
 # Obsidian stuff
 export OBSIDIAN_REST_API_KEY=77a4b813737c50d736a06ccf9ead181dda9f7a6f3d48fc78f79275ed1477ff48
-alias notes='cd ~/Obsidian/ && nvim'
+alias notes='cd ~/notes && nvim'
 
 
 # Hyprland

@@ -14,7 +14,7 @@ paru -S git neovim tmux node npm ripgrep unzip wget curl
 
 ### Window Manager
 ```bash
-paru -S hyprland hyprpaper hyprlock hypridle dunst waybar python-watchdog foot rofi-lbonn-wayland-git libnotify upower pavucontrol wl-clipboard cliphist imagemagick firefox-developer-edition mpvpaper hyprpicker brightnessctl pamixer playerctl wayvnc polkit-kde-agent gnome-keyring network-manager-applet networkmanager kdeconnect syncthing slurp grim python-pyudev pipewire wireplumber xdg-desktop-portal-hyprland xwaylandvideobridge greetd  bluez bluez-utils blueman 
+paru -S hyprland hyprpaper hyprlock hypridle dunst waybar python-watchdog foot rofi-lbonn-wayland-git libnotify upower pavucontrol wl-clipboard cliphist imagemagick firefox-developer-edition mpvpaper hyprpicker brightnessctl pamixer playerctl wayvnc polkit-kde-agent gnome-keyring network-manager-applet networkmanager kdeconnect syncthing slurp grim python-pyudev pipewire wireplumber xdg-desktop-portal-hyprland xwaylandvideobridge greetd  bluez bluez-utils blueman wf-recorder
 ```
 
 ### Bluetooth
