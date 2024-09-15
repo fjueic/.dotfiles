@@ -10,6 +10,14 @@ menu = f"rofi -terminal {terminal} -show drun"
 
 config.add_config_entries(
     bind=[
+        (mainMod,"G","exec","cat ~/information.txt | rofi -dmenu | wl-copy")
+    ]
+)
+config.add_config_entries(
+    bind=("CTRL SHIFT","Y","exec","wl-paste | wtype -")
+)
+config.add_config_entries(
+    bind=[
         # some main things
         (mainMod, "RETURN", "exec", terminal),
         (mainMod, "C", "exec", "~/.config/hypr/script/minimizeSteam.sh"),
@@ -107,6 +115,7 @@ config.add_config_entries(
 # Workspace rules
 config.add_config_entries(
     workspace=[
+        # *[(f"{i},monitor:eDP-1") for i in range(1, 11)],
         *[(f"{i},monitor:eDP-1") for i in range(1, 8)],
         *[(f"{i},monitor:HEADLESS-2") for i in range(8, 11)],
     ]

@@ -5,6 +5,7 @@ conf.add_config_entries(
     monitor=[
         ("eDP-1", "1920x1080", "0x0", "1"),
         ("HEADLESS-2", "1280x720", "2000x2000", "1"),
+        # ("HEADLESS-2", "640x360", "2000x2000", "1"),
     ],
     env=[("XCURSOR_SIZE", "24"), ("MOZ_ENABLE_WAYLAND", "1")],
     input={
@@ -73,21 +74,9 @@ conf.add_config_entries(
 )
 
 
-def hyprshade():
-    import subprocess
-
-    command = ["bash", "-c", "sleep 1;hyprshade on blue-light-filter"]
-    subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        close_fds=True,
-    )
 
 
 config = Hyprlang("/tmp/hyprlang/hyprland.conf", __file__)
-conf.add_side_effect(hyprshade)
 import hyprbinds
 import hyprExecOnce
 

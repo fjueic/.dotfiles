@@ -1,0 +1,12 @@
+[terminal]
+# The VT to run the greeter on. Can be "next", "current" or a number
+# designating the VT.
+vt = 1
+
+[default_session]
+command = "bash"
+user = "minoru"
+
+[initial_session]
+command = "/home/minoru/.config/hypr/script/launchHyprland.sh"
+user = "minoru"
