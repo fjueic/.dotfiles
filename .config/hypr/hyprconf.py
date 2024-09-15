@@ -51,9 +51,9 @@ conf.add_config_entries(
             "enabled": 1,
             "size": 3,
             "passes": 1,
-            "vibrancy": 0.1696,
         },
         "fullscreen_opacity": 1,
+        "screen_shader":"~/.config/hypr/shaders/bluelight.frag",
     },
     animations={
         "enabled": 0,
