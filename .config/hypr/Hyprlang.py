@@ -1,3 +1,4 @@
+import ast
 from typing import Union
 
 
@@ -69,8 +70,6 @@ class Parameters:
 
     def __str__(self):
         return ", ".join(str(param) for param in self.params)
-
-
 class Handler:
     """A line in hyprlang"""
 
@@ -135,51 +134,8 @@ class Hyprlang_config:
     Only one instance of class should be created per file and stored in a variable named `config`.
     """
 
-    def __init__(self, file_name: str):
-        self.file_name = file_name
+    def __init__(self):
         self.config = []
-        self.sideEffects = []
-
-    def add_side_effect(self, *side_effects):
-        """Adds a side effect to the hyprlang"""
-        for s in side_effects:
-            self.sideEffects.append(s)
-
-    @classmethod
-    def from_file(cls, file_name: str):
-        """Creates a Hyprlang instance from a python file.
-        Put all Hyprlang_config instances in a variable named `config` in the file for this to work and also under same directory
-        """
-        import importlib
-        import os
-        from time import sleep
-
-        while True:
-            if not file_name.endswith(".py") or not os.path.exists(file_name):
-                os.system("notify-send 'File should be a python file'")
-                os.system('notify-send "Waiting for 10 seconds"')
-                sleep(10)
-            else:
-                break
-
-        import sys
-
-        path = os.path.dirname(file_name)
-        name = os.path.basename(file_name).split(".")[0]
-
-        if path not in sys.path:
-            sys.path.append(path)
-
-        while True:
-            try:
-                module = importlib.import_module(name)
-                importlib.reload(module)  # Reload the module to get a fresh instance
-                break
-            except Exception as e:
-                os.system(f'notify-send "{e}"')
-                os.system('notify-send "Error in config file, waiting for 10 seconds"')
-                sleep(10)
-        return module.config
 
     def add_config_entries(self, **kwargs):
         """Adds a handler or category to the hyprlang"""
@@ -211,83 +167,317 @@ class Hyprlang_config:
     def __str__(self):
         res = ""
         for obj in self.config:
-            if isinstance(obj, Hyprlang):
-                for o in obj.config:
-                    res += str(o) + "\n"
-            else:
-                res += str(obj) + "\n"
+            res += str(obj) + "\n"
         return res
 
 
-class Hyprlang:
-    """The main class for the hyprlang.
-    One file file named config"""
 
-    def __init__(self, config_path: str, file_name: str):
-        self.config_path = config_path
-        self.file_name = file_name
-        self.config = []  # Hyprlang_config object will be stored here
-        self.observer = None
+# Transformer class
+class Transformer(ast.NodeTransformer):
+    def __init__(self, tracker_name):
+        self.tracker_name = tracker_name
+        self.context_stack = []  # Tracks context
+        self.variables = set()
+        self.with_targets = set() 
 
-    def add(self, *config: Hyprlang_config):
-        """Adds a config to the hyprlang"""
-        for c in config:
-            self.config.append(c)
+    def visit_FunctionDef(self, node):
+        self.context_stack.append("function")
+        self.generic_visit(node)
+        self.context_stack.pop()
+        return node
 
-    def watch(self):
-        import os
+    def visit_ClassDef(self, node):
+        self.context_stack.append("class")
+        self.generic_visit(node)
+        self.context_stack.pop()
+        return node
 
-        from watchdog.events import FileSystemEventHandler
-        from watchdog.observers import Observer
+    def visit_Lambda(self, node):
+        self.context_stack.append("lambda")
+        self.generic_visit(node)
+        self.context_stack.pop()
+        return node
 
-        class Handler(FileSystemEventHandler):
-            def __init__(self, hyprlang):
-                self.hyprlang = hyprlang
+    def visit_With(self, node):
+        # Track variables defined in the with context
+        for item in node.items:
+            if isinstance(item.optional_vars, ast.Name):
+                self.with_targets.add(item.optional_vars.id)
+        self.generic_visit(node)
+        return node
 
-            def on_modified(self, event):
-                side_effects = []
-                if event.is_directory:
-                    return
-                if os.path.basename(event.src_path) == os.path.basename(
-                    self.hyprlang.file_name
-                ):
-                    config = Hyprlang_config.from_file(self.hyprlang.file_name)
-                    self.hyprlang.config = config.config
-                    for c in self.hyprlang.config:
-                        side_effects.extend(c.sideEffects)
-                else:
-                    for c in self.hyprlang.config:
-                        if event.src_path == c.file_name:
-                            c.config = Hyprlang_config.from_file(c.file_name).config
-                            side_effects.extend(c.sideEffects)
-                self.hyprlang.write()
-                for s in side_effects:
-                    try:
-                        s()
-                    except Exception as e:
-                        os.system(f'notify-send "{e}"')
 
-        if self.observer and self.observer.is_alive():
-            return
-        self.observer = Observer()
-        self.observer.schedule(
-            Handler(self), path=os.path.dirname(self.file_name), recursive=False
-        )
-        self.observer.start()
+    def visit_Name(self, node):
+        # Modify variables only if they're not in the with context's target or inside special scopes
+        if (
+            not self.context_stack
+            and node.id in self.variables
+            and node.id not in self.with_targets
+        ):
+            return ast.copy_location(
+                ast.Name(id=f"{self.tracker_name}.{node.id}", ctx=node.ctx),
+                node
+            )
+        return node
 
-    def __str__(self):
-        res = ""
-        for c in self.config:
-            res += str(c)
-        return res
+    def visit_Assign(self, node):
+        # Modify assignments if not in a function, class, or lambda, but handle 'with' context separately
+        if not self.context_stack:
+            for target in node.targets:
+                if isinstance(target, ast.Name) and not target.id.startswith("_"):
+                    self.variables.add(target.id)
+                    target.id = f"{self.tracker_name}.{target.id}"
+        self.generic_visit(node)
+        return node
 
-    def write(self):
-        """Writes the config to the file"""
-        import os
 
-        if not os.path.exists(os.path.dirname(self.config_path)):
-            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
-        if not os.path.exists(self.config_path):
-            open(self.config_path, "w").close()
-        with open(self.config_path, "w") as f:
-            f.write(str(self))
+def send_notification(message, urgency="normal"):
+    import subprocess
+    subprocess.run(f"notify-send -u {urgency} '{message}'", shell=True)
+
+class Source(ast.NodeTransformer):
+    def __init__(self):
+        self.filename=[]
+    def visit_Assign(self, node):
+        if isinstance(node.targets[0], ast.Name) and node.targets[0].id == "source":
+            with open(node.value.value) as f:
+                code = f.read()
+            self.filename.append(node.value.value)
+            return ast.parse(code)
+        return node
+
+
+
+
+
+
+def convert_to_hyprlang(file, alias={}):
+    if not file.endswith(".py"):
+        return [file]
+    code = """class AutoTracker:
+    def __init__(self):
+        self._history = {}
+
+    def __setattr__(self, name, value):
+        if name != "_history":
+            if name not in self._history:
+                self._history[name] = []
+            self._history[name].append(value)
+        super().__setattr__(name, value)
+
+    def get_history(self, name):
+        return self._history.get(name, [])
+
+    def get_all_history(self):
+        return self._history
+
+# Transform the code
+_tracker = AutoTracker()
+
+"""+open(file).read()
+    pre_code = code
+
+    visited = []
+    from os import path
+    visited.append(path.abspath(file))
+    while True:
+        source_transformer= Source()
+        tree = ast.parse(code)
+        tree = source_transformer.visit(tree)
+        code = ast.unparse(tree)
+        if code == pre_code:
+            break
+        pre_code = code
+        if source_transformer.filename in visited:
+            send_notification(f"Circular dependency detected from {visited[-1]} to {source_transformer.filename}", "critical")
+            return visited
+        for i in source_transformer.filename:
+            if i:
+                visited.append(path.abspath(i))
+
+    tree=ast.parse(code)
+    transformer = Transformer("_tracker")
+    tree = transformer.visit(tree)
+    code = ast.unparse(tree)
+
+    variables = {}
+    exec(code,{},variables)
+    # print(variables["_tracker"].get_all_history())
+    data = variables["_tracker"].get_all_history()
+    try:
+        from os import path
+        output = path.expanduser(data["output"][-1])
+        data.pop("output")
+        del path
+    except:
+        send_notification(f"{file}: Output variable of type str required", "critical")
+        return visited
+    for key, value in alias.items():
+        if key in data:
+            data[value] = data[key]
+            data.pop(key)
+    config = Hyprlang_config()
+    config.add_config_entries(**data)
+    with open(output, "w") as f:
+        f.write(str(config))
+
+    return visited
+
+    
+
+
+
+global observers
+global files
+observers = {
+    # directory : obserber
+}
+files = {
+    # main file : [dependencies] 
+    # dependencies include main file
+}
+
+
+def main(args,alias):
+    from os import path
+    main_files = set()
+    for file in args:
+        if path.exists(file):
+            main_files.add(path.abspath(file))
+        else:
+            send_notification(f"File {file} does not exist", "critical")
+    if not main_files:
+        send_notification("No valid files found", "critical")
+        return
+    
+    for file in main_files:
+        files[file] = convert_to_hyprlang(file, alias)
+        files[file] = [path.abspath(file) for file in files[file]]
+
+    for file in files:
+        for dependency in files[file]:
+            directory = path.dirname(dependency)
+            if directory not in observers:
+                from watchdog.events import FileSystemEventHandler
+                from watchdog.observers import Observer
+                class Handler(FileSystemEventHandler):
+                    def on_modified(self, event):
+                        global files
+                        global observers
+                        if event.is_directory:
+                            return
+                        for key,value in files.items():
+                            if path.abspath(event.src_path) in value:
+                                while 1:
+                                    try:
+                                        files[key] = convert_to_hyprlang(key, alias)
+                                        break
+                                    except Exception as e:
+                                        send_notification(f"Error in {key}: {e}.\nRETRY IN 10 sec", "critical")
+                                        from time import sleep
+                                        sleep(10)
+                                files[key] = [path.abspath(file) for file in files[key]]
+                                break
+                        for observer in observers.values():
+                            observer.stop()
+                            
+                        observers={}
+                        for file in files:
+                            for dependency in files[file]:
+                                directory = path.dirname(dependency)
+                                if directory not in observers:
+                                    observers[directory] = Observer()
+                                    observers[directory].schedule(Handler(), path=directory, recursive=False)
+                                    observers[directory].start()
+
+
+                        
+
+
+                observers[directory] = Observer()
+                observers[directory].schedule(Handler(), path=directory, recursive=False)
+                observers[directory].start()
+    from time import sleep
+
+    try:
+        while 1:
+            sleep(10**9)
+    except KeyboardInterrupt:
+        for observer in observers.values():
+            observer.stop()
+        del sleep
+        return
+    
+
+                                        
+
+
+
+    """
+    observers= []
+    for file in args:
+        files = convert_to_hyprlang(file, alias)
+        observers.append({
+            "file": file,
+            "dependencies": files,
+            "observers": []
+        })
+        dir_to_watch = set()
+        for file in files:
+            dir_to_watch.add(path.dirname(path.expanduser(file)))
+        for directory in dir_to_watch:
+            if not path.exists(directory):
+                continue
+            from watchdog.events import FileSystemEventHandler
+            from watchdog.observers import Observer
+            class Handler(FileSystemEventHandler):
+                def on_modified(self, event):
+                    global flag
+                    if flag:
+                        return
+                    flag = True
+                    if event.is_directory:
+                        return
+                    for i in range(len(observers)):
+                        if event.src_path in observers[i]["dependencies"]:
+                            for observer in observers[i]["observers"]:
+                                observer.stop()
+                                # observer.join()
+                            while 1:
+                                try:
+                                    files = convert_to_hyprlang(observers[i]["file"], alias)
+                                    break
+                                except Exception as e:
+                                    send_notification(f"Error in {observers[i]['file']}: {e}.\nRETRY IN 10 sec", "critical")
+                                    from time import sleep
+                                    sleep(10)
+                                    del sleep
+                            observers[i]["dependencies"] = files
+                            dir_to_watch = set()
+                            for file in observers[i]["dependencies"]:
+                                dir_to_watch.add(path.dirname(path.expanduser(file)))
+                            for directory in dir_to_watch:
+                                if not path.exists(directory):
+                                    continue
+                                observers[i]["observers"].append(Observer())
+                                observers[i]["observers"][-1].schedule(Handler(), path=directory, recursive=False)
+                                observers[i]["observers"][-1].start()
+                    flag = False
+
+                                
+                                
+            observers[-1]["observers"].append(Observer())
+            observers[-1]["observers"][-1].schedule(Handler(), path=directory, recursive=False)
+            observers[-1]["observers"][-1].start()
+
+    from time import sleep
+    sleep(10**9)
+        """
+if __name__ == "__main__":
+    alias = {
+        "exec_once":"exec-once",
+    }
+    import sys
+    args = sys.argv[1:]
+    del sys
+    main(args,alias)

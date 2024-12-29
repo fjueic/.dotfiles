@@ -1,229 +1,156 @@
-from Hyprlang import *
-
-config = Hyprlang_config(__file__)
-mainMod = "SUPER"
-terminal = "foot"
-# terminal = 'kitty'
-fileManager = "nautilus"
-fileManager = f"{terminal} ranger"
-menu = f"rofi -terminal {terminal} -show drun"
-
-config.add_config_entries(
-    bind=[
-        (mainMod,"G","exec","cat ~/information.txt | rofi -dmenu | wl-copy")
-    ]
-)
-config.add_config_entries(
-    bind=("CTRL SHIFT","Y","exec","wl-paste | wtype -")
-)
-config.add_config_entries(
-    bind=[
-        # some main things
-        (mainMod, "RETURN", "exec", terminal),
-        (mainMod, "C", "exec", "~/.config/hypr/script/minimizeSteam.sh"),
-        (mainMod, "E", "exec", fileManager),
-        (mainMod, "V", "togglefloating"),
-        (mainMod, "R", "exec", menu),
-        (mainMod, "P", "pseudo"),
-        (mainMod, "O", "togglesplit"),
-        (mainMod, "W", "exec", "firefox-developer-edition"),
-        (mainMod, "HOME", "exit"),
-        (mainMod, "F", "fullscreen"),
-        # Move focus with mainMod + arrow keys
-        (mainMod, "H", "movefocus", "l"),
-        (mainMod, "L", "movefocus", "r"),
-        (mainMod, "K", "movefocus", "u"),
-        (mainMod, "J", "movefocus", "d"),
-        (mainMod, "left", "movefocus", "l"),
-        (mainMod, "right", "movefocus", "r"),
-        (mainMod, "up", "movefocus", "u"),
-        (mainMod, "down", "movefocus", "d"),
-        # Moving windows
-        (f"{mainMod} SHIFT", "H", "swapwindow", "l"),
-        (f"{mainMod} SHIFT", "L", "swapwindow", "r"),
-        (f"{mainMod} SHIFT", "K", "swapwindow", "u"),
-        (f"{mainMod} SHIFT", "J", "swapwindow", "d"),
-        (f"{mainMod} SHIFT", "left", "swapwindow", "l"),
-        (f"{mainMod} SHIFT", "right", "swapwindow", "r"),
-        (f"{mainMod} SHIFT", "up", "swapwindow", "u"),
-        (f"{mainMod} SHIFT", "down", "swapwindow", "d"),
-    ],
-    # Window resizing
-    binde=[
-        (f"{mainMod} CTRL", "H", "resizeactive", Vec2(-60, 0)),
-        (f"{mainMod} CTRL", "L", "resizeactive", Vec2(60, 0)),
-        (f"{mainMod} CTRL", "K", "resizeactive", Vec2(0, -60)),
-        (f"{mainMod} CTRL", "J", "resizeactive", Vec2(0, 60)),
-        (f"{mainMod} CTRL", "left", "resizeactive", Vec2(-60, 0)),
-        (f"{mainMod} CTRL", "right", "resizeactive", Vec2(60, 0)),
-        (f"{mainMod} CTRL", "up", "resizeactive", Vec2(0, -60)),
-        (f"{mainMod} CTRL", "down", "resizeactive", Vec2(0, 60)),
-    ],
-)
-
-config.add_config_entries(
-    bindl=[
-        # change wallpaper between static and video
-        # (
-        #     f"{mainMod} SHIFT",
-        #     "C",
-        #     "exec",
-        #     '(pidof mpvpaper > /dev/null && killall mpvpaper && notify-send "Wallpaper changed to static") || (notify-send "Wallpaper changed to video" && mpvpaper -o "no-audio loop-file=\'inf\'" "*" \'/home/minoru/Desktop/wallpapers/yoimiya/1 [ZimHFN2wdEE].mkv\' &)',
-        # ),
-        # ScreenShot with print
-        (
-            "",
-            "print",
-            "exec",
-            '~/.config/hypr/script/screenshot.sh 1 && notify-send "ScreenShot Saved"',
-        ),
-        (
-            "ALT",
-            "print",
-            "exec",
-            '~/.config/hypr/script/screenshot.sh && notify-send "ScreenShot Saved"',
-        ),
-        # ScreenRecording with mainMod + print
-        ("SUPER", "print", "exec", "~/.config/hypr/script/recorder.sh"),
-    ]
-)
+from Hyprlang import Vec2
+_mainMod = "SUPER"
+# _mainMod = "CTRL ALT SHIFT"
+_terminal = "foot"
+# _terminal = 'kitty'
+_fileManager = "nautilus"
+_fileManager = f"{_terminal} ranger"
+_menu = f"rofi -terminal {_terminal} -show drun"
+_mainMod_SHIFT = f"{_mainMod} SHIFT"
+_exec = "exec"
+_movefocus = "movefocus"
+_mainMod_CTRL = f"{_mainMod} CTRL"
+_swapwindow = "swapwindow"
+_resizeactive = "resizeactive"
+_left = "left"
+_right = "right"
+_up = "up"
+_down = "down"
 
 
-config.add_config_entries(
-    bind=[
-        # clipboard binding with mainMod + ` (backtick)
-        (mainMod, "grave", "exec", "~/.config/hypr/script/copy.sh"),
-        # hyprpicker
-        (f"{mainMod} SHIFT", "P", "exec", "hyprpicker | wl-copy"),
-        # monitor rotate
-        (mainMod, "Tab", "focusmonitor", -1),
-    ]
-)
 
-config.add_config_entries(
-    bind=[
-        # Switch workspaces with mainMod + [0-9]
-        *[(mainMod, str(i % 10), "workspace", i) for i in range(1, 11)],
-        # Move active window to a workspace with mainMod + SHIFT + [0-9]
-        *[
-            (f"{mainMod} SHIFT", str(i % 10), "movetoworkspace", i)
-            for i in range(1, 11)
-        ],
-    ]
-)
+# bind=_mainMod,"A",_exec,"notify-send 'Hello, World!'"
+
+# Keybinds
+bind=_mainMod,"G",_exec,"cat ~/information.txt | rofi -dmenu | wl-copy"
+bind="CTRL SHIFT","Y",_exec,"wl-paste | wtype -"
+bind=_mainMod,"RETURN",_exec,_terminal
+bind=_mainMod,"C",_exec,"~/.config/hypr/script/minimizeSteam.sh"
+bind=_mainMod,"E",_exec,_fileManager
+bind=_mainMod,"V","togglefloating"
+bind=_mainMod,"R",_exec,_menu
+bind=_mainMod,"P","pseudo"
+bind=_mainMod,"O","togglesplit"
+bind=_mainMod,"W",_exec,"firefox-developer-edition"
+bind=_mainMod,"HOME","exit"
+bind=_mainMod,"F","fullscreen"
+# Move focus with mainMod + arrow keys
+bind=_mainMod,"H",_movefocus,"l"
+bind=_mainMod,"L",_movefocus,"r"
+bind=_mainMod,"K",_movefocus,"u"
+bind=_mainMod,"J",_movefocus,"d"
+bind=_mainMod,_left,_movefocus,"l"
+bind=_mainMod,_right,_movefocus,"r"
+bind=_mainMod,_up,_movefocus,"u"
+bind=_mainMod,_down,_movefocus,"d"
+# Moving windows
+bind=_mainMod_SHIFT,"H",_swapwindow,"l"
+bind=_mainMod_SHIFT,"L",_swapwindow,"r"
+bind=_mainMod_SHIFT,"K",_swapwindow,"u"
+bind=_mainMod_SHIFT,"J",_swapwindow,"d"
+bind=_mainMod_SHIFT,_left,_swapwindow,"l"
+bind=_mainMod_SHIFT,_right,_swapwindow,"r"
+bind=_mainMod_SHIFT,_up,_swapwindow,"u"
+bind=_mainMod_SHIFT,_down,_swapwindow,"d"
+# Window resizing
+binde=_mainMod_CTRL,"H",_resizeactive,Vec2(-60, 0)
+binde=_mainMod_CTRL,"L",_resizeactive,Vec2(60, 0)
+binde=_mainMod_CTRL,"K",_resizeactive,Vec2(0, -60)
+binde=_mainMod_CTRL,"J",_resizeactive,Vec2(0, 60)
+binde=_mainMod_CTRL,_left,_resizeactive,Vec2(-60, 0)
+binde=_mainMod_CTRL,_right,_resizeactive,Vec2(60, 0)
+binde=_mainMod_CTRL,_up,_resizeactive,Vec2(0, -60)
+binde=_mainMod_CTRL,_down,_resizeactive,Vec2(0, 60)
+
+# change wallpaper between static and video
+# bindl = _mainMod_SHIFT,"C",_exec,'(pidof mpvpaper > /dev/null && killall mpvpaper && notify-send "Wallpaper changed to static") || (notify-send "Wallpaper changed to video" && mpvpaper -o "no-audio loop-file=\'inf\'" "*" \'/home/minoru/Desktop/wallpapers/yoimiya/1 [ZimHFN2wdEE].mkv\' &)'
+
+# ScreenShot with print
+bindl="","print",_exec,'~/.config/hypr/script/screenshot.sh 1 && notify-send "ScreenShot Saved"'
+bindl="ALT","print",_exec,'~/.config/hypr/script/screenshot.sh && notify-send "ScreenShot Saved"'
+bindl=_mainMod,"print",_exec,'~/.config/hypr/script/recorder.sh'
+
+# clipboard binding with mainMod + ` (backtick)
+bind=_mainMod,"grave",_exec,'~/.config/hypr/script/copy.sh'
+# hyprpicker
+bind=_mainMod_SHIFT,"P",_exec,'hyprpicker | wl-copy'
+# monitor rotate
+bind=_mainMod,"Tab","focusmonitor",-1
+
+for i in range(1, 11):
+    # Switch workspaces with mainMod + [0-9]
+    bind=_mainMod,str(i % 10),"workspace",i
+    # Move active window to a workspace with mainMod + SHIFT + [0-9]
+    bind=_mainMod_SHIFT,str(i % 10),"movetoworkspace",i
 
 # Workspace rules
-config.add_config_entries(
-    workspace=[
-        # *[(f"{i},monitor:eDP-1") for i in range(1, 11)],
-        *[(f"{i},monitor:eDP-1") for i in range(1, 8)],
-        *[(f"{i},monitor:HEADLESS-2") for i in range(8, 11)],
-    ]
-)
+# for i in range(1,11):
+#     workspace=f"{i},monitor:eDP-1"
+for i in range(1, 8):
+    workspace=f"{i},monitor:eDP-1"
+for i in range(8, 11):
+    workspace=f"{i},monitor:HEADLESS-2"
 
 # Special workspace (scratchpad)
-config.add_config_entries(
-    bind=[
-        (mainMod, "S", "togglespecialworkspace", "magic"),
-        (f"{mainMod} SHIFT", "S", "movetoworkspace", "special:magic"),
-    ]
-)
+bind=_mainMod,"S","togglespecialworkspace","magic"
+bind=_mainMod_SHIFT,"S","movetoworkspace","special:magic"
 
 # Shutdown, reboot, lock, etc.
-config.add_config_entries(
-    bind=[
-        (mainMod, "DELETE", "exec", "systemctl poweroff"),
-        (mainMod, "END", "exec", "systemctl reboot"),
-        (mainMod, "PAGE_DOWN", "exec", "systemctl suspend"),
-        (mainMod, "PAGE_UP", "exec", "loginctl lock-session"),
-        (mainMod, "INSERT", "forcerendererreload"),
-    ]
-)
+bind=_mainMod,"DELETE",_exec,"systemctl poweroff"
+bind=_mainMod,"END",_exec,"systemctl reboot"
+bind=_mainMod,"PAGE_DOWN",_exec,"systemctl suspend"
+bind=_mainMod,"PAGE_UP",_exec,"loginctl lock-session"
+bind=_mainMod,"INSERT","forcerendererreload"
 
 # Scroll through existing workspaces with mainMod + scroll
-config.add_config_entries(
-    bind=[
-        (mainMod, "mouse_down", "workspace", "e+1"),
-        (mainMod, "mouse_up", "workspace", "e-1"),
-    ]
-)
+bind=_mainMod,"mouse_down","workspace","e+1"
+bind=_mainMod,"mouse_up","workspace","e-1"
 
 # Move/resize windows with mainMod + LMB/RMB and dragging
-config.add_config_entries(
-    bindm=[
-        (mainMod, "mouse:272", "movewindow"),
-        (mainMod, "mouse:273", "resizewindow"),
-    ]
-)
+bindm=_mainMod,"mouse:272","movewindow"
+bindm=_mainMod,"mouse:273","resizewindow"
 
 # Brightness and volume controls
-config.add_config_entries(
-    bindel=[
-        ("", "XF86MonBrightnessUp", "exec", "brightnessctl set +10%"),
-        ("", "XF86MonBrightnessDown", "exec", "brightnessctl set 10%-"),
-        ("", "XF86AudioRaiseVolume", "exec", "pamixer -i 5"),
-        ("", "XF86AudioLowerVolume", "exec", "pamixer -d 5"),
-        ("", "XF86AudioMute", "exec", "pamixer -t"),
-    ]
-)
+bindel="","XF86MonBrightnessUp",_exec,"brightnessctl set +10%"
+bindel="","XF86MonBrightnessDown",_exec,"brightnessctl set 10%-"
+bindel="","XF86AudioRaiseVolume",_exec,"pamixer -i 5"
+bindel="","XF86AudioLowerVolume",_exec,"pamixer -d 5"
+bindel="","XF86AudioMute",_exec,"pamixer -t"
 
 # Media keys
-config.add_config_entries(
-    binde=[
-        ("", "XF86AudioPlay", "exec", "playerctl play-pause"),
-        ("", "XF86AudioNext", "exec", "playerctl next"),
-        ("", "XF86AudioPrev", "exec", "playerctl previous"),
-    ]
-)
+binde="","XF86AudioPlay",_exec,"playerctl play-pause"
+binde="","XF86AudioNext",_exec,"playerctl next"
+binde="","XF86AudioPrev",_exec,"playerctl previous"
 
 # copy pdf dark mode code
-config.add_config_entries(
-    bind=[
-        ("CTRL+ALT", "D", "exec", "cat ~/Obsidian/dark\ mode.js | wl-copy"),
-    ]
-)
+bind="CTRL+ALT","D",_exec,r"cat ~/Obsidian/dark\ mode.js | wl-copy"
 
 # waybar
-config.add_config_entries(
-    bind=[
-        (
-            mainMod,
-            "space",
-            "exec",
-            "pidof waybar >/dev/null && killall waybar || waybar",
-        ),
-    ]
-)
+bind=_mainMod,"space",_exec,"pidof waybar >/dev/null && killall waybar || waybar"
 
 # display on and off
-config.add_config_entries(
-    bindl=[
-        (mainMod, "d", "exec", "sleep 1 && hyprctl dispatch dpms off"),
-        (mainMod, "u", "exec", "sleep 1 && hyprctl dispatch dpms on"),
-    ],
-)
+bindl=_mainMod,"d",_exec,"sleep 1 && hyprctl dispatch dpms off"
+bindl=_mainMod,"u",_exec,"sleep 1 && hyprctl dispatch dpms on"
 
 # zoom
-get_zoom = "hyprctl getoption cursor:zoom_factor | grep float"
-notifier_zoom = get_zoom + " | awk '{print $2}'" " | xargs notify-send -t 1000"
-# out: float: some_float
-zoom_in = (
-    f"{get_zoom} | awk "
+_get_zoom="hyprctl getoption cursor:zoom_factor | grep float"
+_notifier_zoom=_get_zoom+" | awk '{print $2}'"+" | xargs notify-send -t 1000"
+
+_zoom_in=(
+    f"{_get_zoom} | awk "
     "'"
     '{ system("hyprctl keyword cursor:zoom_factor " $2 + 0.1) }'
     "'"
 )
 
-zoom_out = (
-    f"{get_zoom} | awk "
+_zoom_out=(
+    f"{_get_zoom} | awk "
     "'"
     '{if($2!=1) system("hyprctl keyword cursor:zoom_factor " $2 - 0.1) }'
     "'"
 )
 
-config.add_config_entries(
-    binde=[
-        (mainMod, "minus", "exec", zoom_out + " && " + notifier_zoom),
-        (mainMod, "equal", "exec", zoom_in + " && " + notifier_zoom),
-    ]
-)
+binde=_mainMod,"minus",_exec,_zoom_out+" && "+_notifier_zoom
+binde=_mainMod,"equal",_exec,_zoom_in+" && "+_notifier_zoom
+
+
