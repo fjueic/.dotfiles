@@ -150,7 +150,7 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 #######################################################
 # GIT BARE REPO FOR DOTFILES ALIAS'S
 #######################################################
-alias dfc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dfc='/usr/bin/git --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME/.dotfiles/'
 
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin"
 export PATH=$PATH:"$HOME/.config/hypr/script"
