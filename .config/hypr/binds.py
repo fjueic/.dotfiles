@@ -1,4 +1,5 @@
 from Hyprlang import Vec2
+from hypridle import _lock_cmd
 _mainMod = "SUPER"
 # _mainMod = "CTRL ALT SHIFT"
 _terminal = "foot"
@@ -84,12 +85,12 @@ for i in range(1, 11):
     bind=_mainMod_SHIFT,str(i % 10),"movetoworkspace",i
 
 # Workspace rules
-# for i in range(1,11):
-#     workspace=f"{i},monitor:eDP-1"
-for i in range(1, 8):
+for i in range(1,11):
     workspace=f"{i},monitor:eDP-1"
-for i in range(8, 11):
-    workspace=f"{i},monitor:HEADLESS-2"
+# for i in range(1, 8):
+#     workspace=f"{i},monitor:eDP-1"
+# for i in range(8, 11):
+#     workspace=f"{i},monitor:HEADLESS-2"
 
 # Special workspace (scratchpad)
 bind=_mainMod,"S","togglespecialworkspace","magic"
@@ -99,7 +100,7 @@ bind=_mainMod_SHIFT,"S","movetoworkspace","special:magic"
 bind=_mainMod,"DELETE",_exec,"systemctl poweroff"
 bind=_mainMod,"END",_exec,"systemctl reboot"
 bind=_mainMod,"PAGE_DOWN",_exec,"systemctl suspend"
-bind=_mainMod,"PAGE_UP",_exec,"loginctl lock-session"
+bind=_mainMod,"PAGE_UP",_exec,f"loginctl lock-session || {_lock_cmd}"
 bind=_mainMod,"INSERT","forcerendererreload"
 
 # Scroll through existing workspaces with mainMod + scroll

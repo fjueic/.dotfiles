@@ -1,19 +1,12 @@
 from Hyprlang import RGBA
-output="./hyprlock.conf"
-_wallpaper = '/home/minoru/Desktop/jjk/sukuna-yuji-itadori-jujutsu-kaisen-4k-wallpaper-uhdpaper.com-593@0@e.jpg'
-# wallpaper = '/home/minoru/Desktop/jjk/sukuna-itadori-jujutsu-kaisen-4k-wallpaper-uhdpaper.com-194@2@a.jpg'
+output="~/.config/hypr/hyprlock.conf"
+
 _text_color = RGBA(255, 255, 255, 1)
 _monitor = {"monitor": [""]}
 
-def pre_process(wall):
-    from os import system
 
-    system(
-        f'magick "{wall}" -resize 1920x1080 -background black -gravity center -extent 1920x1080 /tmp/hyprlang/lock_wallpaper.png'
-    )
+_wallpaper = "/home/minoru/Desktop/wallpaper/jjk/2.jpg"
 
-pre_process(_wallpaper)
-_wallpaper = "/tmp/hyprlang/lock_wallpaper.png"
 general={
     "no_fade_in": 1,
     "no_fade_out": 1,
@@ -46,11 +39,8 @@ input_field={
     "color": RGBA(0, 0, 0, 0.8),
     "fade_on_empty": "true",
     "hide_input": "false",
-    "position": (0, 0),
+    "position": (10, 0),
     "halign": "center",
     "valign": "bottom",
 }
-
-
-
 

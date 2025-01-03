@@ -476,6 +476,7 @@ def main(args,alias):
 if __name__ == "__main__":
     alias = {
         "exec_once":"exec-once",
+        "input_field":"input-field",
     }
     import sys
     args = sys.argv[1:]
