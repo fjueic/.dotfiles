@@ -1,10 +1,10 @@
 from Hyprlang import *
 
 
-output="./hyprland.conf"
+output="~/.config/hypr/hyprland.conf"
 
 monitor="eDP-1", "1920x1080", "0x0", "1"
-monitor="HEADLESS-2", "1280x720", "2000x2000", "1"
+# monitor="HEADLESS-2", "1280x720", "2000x2000", "1"
 # monitor="HEADLESS-2", "640x360", "2000x2000", "1"
 
 env="XCURSOR_SIZE", "24"
@@ -54,7 +54,7 @@ decoration={
         "passes": 1,
     },
     "fullscreen_opacity": 1,
-    "screen_shader":"~/.config/hypr/shaders/bluelight.frag",
+    # "screen_shader":"~/.config/hypr/shaders/bluelight.frag",
 }
 animations={
     "enabled": 0,
@@ -72,7 +72,7 @@ misc={
     "vfr": "true",
 }
 
-source="./hyprbinds.py"
-source="./hyprExecOnce.py"
+source="./binds.py"
+source="./ExecOnce.py"
 
 

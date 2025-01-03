@@ -1,13 +1,13 @@
 # lock on boot
-# exec_once="[ -f /tmp/hyprlang/hyprlock.conf ] && (hyprlock || hyprctl dispatch exit)"
+exec_once="(hyprlock || hyprctl dispatch exit)"
 # create virtual monitor
-exec_once="hyprctl output create headless"
+# exec_once="hyprctl output create headless"
 # wayvnc
-exec_once="pidof wayvnc || wayvnc -g 0.0.0.0"
+# exec_once="pidof wayvnc || wayvnc -g 0.0.0.0"
 # hypridle
 exec_once="(killall hypridle || true) && hypridle"
 exec_once="(pidof waybar || waybar)"
-exec_once="(pidof hyprpaper || [ -f /tmp/hyprlang/hyprpaper.conf ] && hyprpaper)"
+exec_once="(pidof hyprpaper || hyprpaper )"
 exec_once="systemctl --user start plasma-polkit-agent"
 exec_once="gnome-keyring-daemon --start --components=secrets"
 exec_once="blueman-applet"
@@ -33,7 +33,9 @@ exec_once="hyprshade on blue-light-filter"
 # exec_once="cd ~/.config/hypr/ && python hypridle.py"
 # exec_once="cd ~/.config/hypr/ && python hyprlock.py"
 # exec_once="cd ~/.config/hypr/ && python hyprpaper.py"
-exec_once= "cd ~/.config/hypr/ && python Hyprlang.py ./hypridle.py ./hyprland.py ./hyprlock.py ./hyprpaper.py "
+exec_once= "cd ~/.dotfiles/.config/hypr/ && python Hyprlang.py ./hypridle.py ./hyprland.py ./hyprlock.py ./hyprpaper.py "
 # screen sharing
 exec_once="dbus-update-activation-environment --systemd wayland_display xdg_current_desktop"
+exec_once="~/.config/hypr/script/slideshow.sh ~/Desktop/wallpaper"
+exec_once="hyprsunset -t 20000K"
 
