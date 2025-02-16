@@ -162,6 +162,8 @@ alias notes='cd ~/notes && nvim'
 
 
 # Hyprland
-alias Hyprland="~/.config/hypr/script/launchHyprland.sh"
+# alias Hyprland="~/.config/hypr/script/launchHyprland.sh"
+
+alias firefox-here="firefox --new-window $(pwd)"
 
 bind '"\C-f":"tmux-sessionizer.sh\n"'

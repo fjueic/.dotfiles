@@ -5,7 +5,7 @@ _mainMod = "SUPER"
 _terminal = "foot"
 # _terminal = 'kitty'
 _fileManager = "nautilus"
-_fileManager = f"{_terminal} ranger"
+# _fileManager = f"{_terminal} ranger"
 _menu = f"rofi -terminal {_terminal} -show drun"
 _mainMod_SHIFT = f"{_mainMod} SHIFT"
 _exec = "exec"
@@ -84,13 +84,6 @@ for i in range(1, 11):
     # Move active window to a workspace with mainMod + SHIFT + [0-9]
     bind=_mainMod_SHIFT,str(i % 10),"movetoworkspace",i
 
-# Workspace rules
-for i in range(1,11):
-    workspace=f"{i},monitor:eDP-1"
-# for i in range(1, 8):
-#     workspace=f"{i},monitor:eDP-1"
-# for i in range(8, 11):
-#     workspace=f"{i},monitor:HEADLESS-2"
 
 # Special workspace (scratchpad)
 bind=_mainMod,"S","togglespecialworkspace","magic"
@@ -127,7 +120,9 @@ binde="","XF86AudioPrev",_exec,"playerctl previous"
 bind="CTRL+ALT","D",_exec,r"cat ~/Obsidian/dark\ mode.js | wl-copy"
 
 # waybar
-bind=_mainMod,"space",_exec,"pidof waybar >/dev/null && killall waybar || waybar"
+# bind="","Super_L",_exec,"killall -SIGUSR1 waybar"
+# bindr=_mainMod,"Super_L",_exec,"killall -SIGUSR1 waybar"
+bind=_mainMod,"space",_exec,"pidof waybar >/dev/null && killall waybar || waybar -s ~/.dotfiles/.config/waybar/style.css"
 
 # display on and off
 bindl=_mainMod,"d",_exec,"sleep 1 && hyprctl dispatch dpms off"

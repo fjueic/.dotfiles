@@ -32,4 +32,7 @@ hyprlock.py
 Hyprlang.py
 binds.py
 ExecOnce.py
+rules.py
+
+
 
