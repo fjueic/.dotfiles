@@ -1,0 +1,10 @@
+palette = "dark"
+check_contrast = true
+
+
+[templates]
+hypr.template = 'colors-hypr.conf'
+hypr.target = '~/.config/hypr/wallust.conf'
+
+waybar.template = 'colors-waybar.css'
+waybar.target = '~/.config/waybar/wallust.css'

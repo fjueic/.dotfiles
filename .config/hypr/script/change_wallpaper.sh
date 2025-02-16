@@ -10,8 +10,9 @@ if [ $# -eq 2 ]; then
     monitor=$1
     wallpaper=$2
 fi
-wallpaper=$(realpath $wallpaper)
+wallpaper=$(realpath "$wallpaper")
 hyprctl hyprpaper unload all 
-hyprctl hyprpaper preload $wallpaper
-hyprctl hyprpaper wallpaper "$monitor,$wallpaper" 
+hyprctl hyprpaper preload "$wallpaper"
+hyprctl hyprpaper wallpaper "$monitor,$wallpaper" && wallust -s run "$wallpaper" || echo "Error: Failed to set wallpaper"
+ 
 

@@ -80,7 +80,10 @@ class Handler:
     def __str__(self):
         res = ""
         for param in self.params:
-            res += f"{self.keyword} = {str(param)}\n"
+            if self.keyword == "raw_text":
+                res += f"{str(param)}\n"
+            else:
+                res += f"{self.keyword} = {str(param)}\n"
         return res
 
 

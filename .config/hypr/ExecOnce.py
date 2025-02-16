@@ -1,12 +1,12 @@
 # lock on boot
 exec_once="(hyprlock || hyprctl dispatch exit)"
 # create virtual monitor
-# exec_once="hyprctl output create headless"
+exec_once="hyprctl output create headless HEADLESS-2"
 # wayvnc
-# exec_once="pidof wayvnc || wayvnc -g 0.0.0.0"
+exec_once="pidof wayvnc || wayvnc -g 0.0.0.0"
 # hypridle
 exec_once="(killall hypridle || true) && hypridle"
-exec_once="(pidof waybar || waybar)"
+exec_once="(pidof waybar || waybar -s ~/.dotfiles/.config/waybar/style.css)"
 exec_once="(pidof hyprpaper || hyprpaper )"
 exec_once="systemctl --user start plasma-polkit-agent"
 exec_once="gnome-keyring-daemon --start --components=secrets"
