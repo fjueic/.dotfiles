@@ -1,126 +1,53 @@
-@import url('/home/minoru/.config/waybar/wallust.css');
-
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    transition-property: all;
-    transition-duration: .5s;
+    font-size: 15px;
 }
 
 window#waybar {
-    transition-duration: .5s;
-    border: none;
-    background-color: transparent;
-    border-radius: 0;
-}
-
-window#waybar.hidden {
-    opacity: 0.2;
+    background-color: rgba(0, 0, 0, 0.95);
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+    color: #ffffff;
 }
 
 window#waybar.empty {
-    /* When there are no windows*/
-
+    background-color: rgba(0, 0, 0, 0.5);
 }
-
-window#waybar.solo {
-    /* When there is only one window */
-    background-color: rgba(0, 0, 0, 0.95);
-}
-
 
 button {
     /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
     /* Avoid rounded borders under each button name */
     border: none;
     border-radius: 0;
 }
 
-#workspaces {
-    background-color: @background;
-    /* background-color: rgba(0, 0, 0, 0.95); */
-    padding: 5 5px;
-    margin: 3 0px;
-    border-radius: 50px;
-    padding: 5px 0;
-}
-
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-
-
 #workspaces button {
-    background-color: @color5;
-    padding: 0px 5px;
-    margin: 2px 2px;
-    border-radius: 50px;
+    padding: 0 5px;
+    background-color: transparent;
     color: #ffffff;
-    background-size: calc(100% - 4px);
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-#workspaces button:not(.hosting-monitor) {
-    background-color: @color2;
-}
-
-
-#workspaces button:first-child {
-    margin-left: 10px;
-}
-
-#workspaces button:last-child {
-    margin-right: 10px;
+    border-radius: 50%;
 }
 
 #workspaces button:hover {
-    border: none;
+    background: rgba(0, 0, 0, 0);
 }
-
-#workspaces button:nth-child(1) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/firefox.svg");
-}
-
-#workspaces button:nth-child(2) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/obsidian.svg");
-}
-
-#workspaces button:nth-child(3) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/terminal.svg");
-}
-
-#workspaces button:nth-child(4) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/chrome.svg");
-}
-
-#workspaces button:nth-child(5) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/discord.svg");
-}
-
-#workspaces button:nth-child(6) {
-    background-image: url("/home/minoru/.dotfiles/.config/waybar/music.svg");
-}
-
 
 #workspaces button.focused {
-    background-color: #64727D;
-}
-
-#workspaces button.active {
-    opacity: 0.5;
+    background-color: #64727d;
+    box-shadow: inset 0 -3px #ffffff;
 }
 
 #workspaces button.urgent {
     background-color: #eb4d4b;
 }
 
-/* you can set a style on hover for any module like this */
-#pulseaudio:hover {
-    background-color: #a37800;
+#mode {
+    background-color: #64727d;
+    border-bottom: 3px solid #ffffff;
 }
 
 #clock,
-#battery,
-#bluetooth,
 #cpu,
 #memory,
 #disk,
@@ -134,48 +61,15 @@ button {
 #mode,
 #idle_inhibitor,
 #scratchpad,
-#power-profiles-daemon,
-#window,
-#custom-cliphist,
 #mpd {
-    background-color: @background;
+    padding: 0 10px;
     color: #ffffff;
-    padding: 0 8px;
-    margin: 3 0px;
-    margin-right: 3px;
-    border-radius: 50px;
 }
 
-#bluetooth {
-    color: @color5;
+#window,
+#workspaces {
+    margin: 0 4px;
 }
-
-#custom-cliphist {
-    color: @color3;
-}
-
-#tray {
-    margin-left: 3px;
-}
-
-#clock {
-    color: @color1;
-    margin-right: 3px
-}
-
-#window {
-    background-color: @background;
-    color: @foreground;
-    transition-property: all;
-    transition-duration: .5s;
-}
-
-#window {
-
-    color: @foreground;
-
-}
-
 
 /* If workspaces is the leftmost module, omit left margin */
 .modules-left>widget:first-child>#workspaces {
@@ -187,100 +81,52 @@ button {
     margin-right: 0;
 }
 
-
-#battery {
-    background-color: #ffffff;
-    color: #000000;
-}
-
-#battery.charging,
-#battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
-}
-
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        color: #ff0000;
     }
 }
 
-/* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
     animation-name: blink;
     animation-duration: 0.5s;
-    animation-timing-function: steps(12);
+    animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-#power-profiles-daemon {
-    padding-right: 15px;
+#battery.charging {
+    color: #5fa92b;
 }
 
-#power-profiles-daemon.performance {
-    background-color: #f53c3c;
-    color: #ffffff;
-}
-
-#power-profiles-daemon.balanced {
-    background-color: #2980b9;
-    color: #ffffff;
-}
-
-#power-profiles-daemon.power-saver {
-    background-color: #2ecc71;
-    color: #000000;
-}
-
-label:focus {
-    background-color: #000000;
+#battery:not(.charging) {
+    color: #fff;
+    /* default color */
 }
 
 #cpu {
-    color: @color10;
-}
-
-#memory {
-    color: @color13;
-}
-
-#disk {
-    background-color: #964B00;
-}
-
-#backlight {
-    background-color: #90b1b1;
+    color: #fff;
 }
 
 #network {
-    color: @color11;
-}
-
-#network.disconnected {
-    background-color: #f53c3c;
+    color: #fff;
 }
 
 #pulseaudio {
-    color: @color4;
+    color: #fff;
 }
 
 #pulseaudio.muted {
-    background-color: #90b1b1;
     color: #2a5c45;
 }
 
-
-#temperature {
-    color: @color5;
+#wireplumber {
+    color: #000000;
 }
 
-#temperature.critical {
-    background-color: #eb4d4b;
-    color: #fff;
+#custom-media {
+    color: #2a5c45;
+    min-width: 100px;
 }
 
 #tray>.passive {
@@ -289,14 +135,12 @@ label:focus {
 
 #tray>.needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
-}
-
-#idle_inhibitor {
-    color: @color9;
 }
 
 #idle_inhibitor.activated {
-    background-color: @foreground;
     color: #2d3436;
+}
+
+#mpd {
+    color: #2a5c45;
 }

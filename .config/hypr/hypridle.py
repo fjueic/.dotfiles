@@ -17,4 +17,3 @@ listener={
     "on-timeout": "systemctl suspend",
 }
 
-

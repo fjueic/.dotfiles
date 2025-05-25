@@ -13,6 +13,6 @@ fi
 wallpaper=$(realpath "$wallpaper")
 hyprctl hyprpaper unload all 
 hyprctl hyprpaper preload "$wallpaper"
-hyprctl hyprpaper wallpaper "$monitor,$wallpaper" && wallust -s run "$wallpaper" || echo "Error: Failed to set wallpaper"
+hyprctl hyprpaper wallpaper "$monitor,$wallpaper" 
  
 

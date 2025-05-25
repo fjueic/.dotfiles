@@ -5,20 +5,15 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["tray","hyprland/window"],
-    "modules-center": ["hyprland/workspaces"],
-    "modules-right": ["custom/cliphist","bluetooth","idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery","clock"],
-    "reload_style_on_change":true,
+    "modules-left": ["hyprland/workspaces", "tray"],
+    "modules-center": ["clock","hyprland/window"],
+    "modules-right": ["custom/cliphist","bluetooth","idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "warp-on-scroll": false,
-        "format": "",
-        "persistent-workspaces": {
-            "eDP-1":[1,2,3,4,5,6],
-            "HEADLESS-2":[1,2,3,4,5,6,7,8,9,10],
-        }
+        "format": "{name}"
     },
 
     "battery": {
@@ -28,7 +23,7 @@
         "states": {
             "critical": 20,
         },
-        "tooltip": true,
+        "tooltip": false,
         "on-click": "notify-send \"$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | rg 'time to empty' | awk '{print $4 \" \" $5}' | tr -d '\n')\"",
     },
 
@@ -46,11 +41,12 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": " ",
-            "deactivated": " "
+            "activated": "",
+            "deactivated": ""
         }
     },
     "tray": {
+        // "icon-size": 21,
         "spacing": 10
     },
     "clock": {
@@ -106,4 +102,5 @@
         "on-click" : "~/.config/hypr/script/copy.sh",
     }
 }
+
 

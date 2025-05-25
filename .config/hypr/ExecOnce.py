@@ -36,6 +36,6 @@ exec_once="hyprshade on blue-light-filter"
 exec_once= "cd ~/.dotfiles/.config/hypr/ && python Hyprlang.py ./hypridle.py ./hyprland.py ./hyprlock.py ./hyprpaper.py "
 # screen sharing
 exec_once="dbus-update-activation-environment --systemd wayland_display xdg_current_desktop"
-exec_once="~/.config/hypr/script/slideshow.sh ~/Desktop/wallpaper"
+# exec_once="~/.config/hypr/script/slideshow.sh ~/Desktop/wallpaper"
 exec_once="hyprsunset -t 20000K"
 

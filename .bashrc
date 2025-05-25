@@ -167,3 +167,4 @@ alias notes='cd ~/notes && nvim'
 alias firefox-here="firefox --new-window $(pwd)"
 
 bind '"\C-f":"tmux-sessionizer.sh\n"'
+

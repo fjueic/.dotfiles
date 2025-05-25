@@ -70,6 +70,8 @@ class Parameters:
 
     def __str__(self):
         return ", ".join(str(param) for param in self.params)
+
+
 class Handler:
     """A line in hyprlang"""
 
@@ -174,14 +176,13 @@ class Hyprlang_config:
         return res
 
 
-
 # Transformer class
 class Transformer(ast.NodeTransformer):
     def __init__(self, tracker_name):
         self.tracker_name = tracker_name
         self.context_stack = []  # Tracks context
         self.variables = set()
-        self.with_targets = set() 
+        self.with_targets = set()
 
     def visit_FunctionDef(self, node):
         self.context_stack.append("function")
@@ -209,7 +210,6 @@ class Transformer(ast.NodeTransformer):
         self.generic_visit(node)
         return node
 
-
     def visit_Name(self, node):
         # Modify variables only if they're not in the with context's target or inside special scopes
         if (
@@ -218,8 +218,7 @@ class Transformer(ast.NodeTransformer):
             and node.id not in self.with_targets
         ):
             return ast.copy_location(
-                ast.Name(id=f"{self.tracker_name}.{node.id}", ctx=node.ctx),
-                node
+                ast.Name(id=f"{self.tracker_name}.{node.id}", ctx=node.ctx), node
             )
         return node
 
@@ -236,11 +235,14 @@ class Transformer(ast.NodeTransformer):
 
 def send_notification(message, urgency="normal"):
     import subprocess
+
     subprocess.run(f"notify-send -u {urgency} '{message}'", shell=True)
+
 
 class Source(ast.NodeTransformer):
     def __init__(self):
-        self.filename=[]
+        self.filename = []
+
     def visit_Assign(self, node):
         if isinstance(node.targets[0], ast.Name) and node.targets[0].id == "source":
             with open(node.value.value) as f:
@@ -250,14 +252,10 @@ class Source(ast.NodeTransformer):
         return node
 
 
-
-
-
-
-def convert_to_hyprlang(file, alias={}):
-    if not file.endswith(".py"):
-        return [file]
-    code = """class AutoTracker:
+def convert_code_to_hyprlang(d: str, alias={}):
+    """This function is specfically made of WeLD"""
+    code = (
+        """class AutoTracker:
     def __init__(self):
         self._history = {}
 
@@ -277,14 +275,61 @@ def convert_to_hyprlang(file, alias={}):
 # Transform the code
 _tracker = AutoTracker()
 
-"""+open(file).read()
+"""
+        + d
+    )
+
+    tree = ast.parse(code)
+    transformer = Transformer("_tracker")
+    tree = transformer.visit(tree)
+    code = ast.unparse(tree)
+    variables = {}
+    exec(code, {}, variables)
+    data = variables["_tracker"].get_all_history()
+    for key, value in alias.items():
+        if key in data:
+            data[value] = data[key]
+            data.pop(key)
+    config = Hyprlang_config()
+    config.add_config_entries(**data)
+    return str(config)
+
+
+def convert_to_hyprlang(file, alias={}):
+    if not file.endswith(".py"):
+        return [file]
+    code = (
+        """class AutoTracker:
+    def __init__(self):
+        self._history = {}
+
+    def __setattr__(self, name, value):
+        if name != "_history":
+            if name not in self._history:
+                self._history[name] = []
+            self._history[name].append(value)
+        super().__setattr__(name, value)
+
+    def get_history(self, name):
+        return self._history.get(name, [])
+
+    def get_all_history(self):
+        return self._history
+
+# Transform the code
+_tracker = AutoTracker()
+
+"""
+        + open(file).read()
+    )
     pre_code = code
 
     visited = []
     from os import path
+
     visited.append(path.abspath(file))
     while True:
-        source_transformer= Source()
+        source_transformer = Source()
         tree = ast.parse(code)
         tree = source_transformer.visit(tree)
         code = ast.unparse(tree)
@@ -292,23 +337,27 @@ _tracker = AutoTracker()
             break
         pre_code = code
         if source_transformer.filename in visited:
-            send_notification(f"Circular dependency detected from {visited[-1]} to {source_transformer.filename}", "critical")
+            send_notification(
+                f"Circular dependency detected from {visited[-1]} to {source_transformer.filename}",
+                "critical",
+            )
             return visited
         for i in source_transformer.filename:
             if i:
                 visited.append(path.abspath(i))
 
-    tree=ast.parse(code)
+    tree = ast.parse(code)
     transformer = Transformer("_tracker")
     tree = transformer.visit(tree)
     code = ast.unparse(tree)
 
     variables = {}
-    exec(code,{},variables)
+    exec(code, {}, variables)
     # print(variables["_tracker"].get_all_history())
     data = variables["_tracker"].get_all_history()
     try:
         from os import path
+
         output = path.expanduser(data["output"][-1])
         data.pop("output")
         del path
@@ -326,9 +375,6 @@ _tracker = AutoTracker()
 
     return visited
 
-    
-
-
 
 global observers
 global files
@@ -336,13 +382,14 @@ observers = {
     # directory : obserber
 }
 files = {
-    # main file : [dependencies] 
+    # main file : [dependencies]
     # dependencies include main file
 }
 
 
-def main(args,alias):
+def main(args, alias):
     from os import path
+
     main_files = set()
     for file in args:
         if path.exists(file):
@@ -352,7 +399,7 @@ def main(args,alias):
     if not main_files:
         send_notification("No valid files found", "critical")
         return
-    
+
     for file in main_files:
         files[file] = convert_to_hyprlang(file, alias)
         files[file] = [path.abspath(file) for file in files[file]]
@@ -363,42 +410,47 @@ def main(args,alias):
             if directory not in observers:
                 from watchdog.events import FileSystemEventHandler
                 from watchdog.observers import Observer
+
                 class Handler(FileSystemEventHandler):
                     def on_modified(self, event):
                         global files
                         global observers
                         if event.is_directory:
                             return
-                        for key,value in files.items():
+                        for key, value in files.items():
                             if path.abspath(event.src_path) in value:
                                 while 1:
                                     try:
                                         files[key] = convert_to_hyprlang(key, alias)
                                         break
                                     except Exception as e:
-                                        send_notification(f"Error in {key}: {e}.\nRETRY IN 10 sec", "critical")
+                                        send_notification(
+                                            f"Error in {key}: {e}.\nRETRY IN 10 sec",
+                                            "critical",
+                                        )
                                         from time import sleep
+
                                         sleep(10)
                                 files[key] = [path.abspath(file) for file in files[key]]
                                 break
                         for observer in observers.values():
                             observer.stop()
-                            
-                        observers={}
+
+                        observers = {}
                         for file in files:
                             for dependency in files[file]:
                                 directory = path.dirname(dependency)
                                 if directory not in observers:
                                     observers[directory] = Observer()
-                                    observers[directory].schedule(Handler(), path=directory, recursive=False)
+                                    observers[directory].schedule(
+                                        Handler(), path=directory, recursive=False
+                                    )
                                     observers[directory].start()
 
-
-                        
-
-
                 observers[directory] = Observer()
-                observers[directory].schedule(Handler(), path=directory, recursive=False)
+                observers[directory].schedule(
+                    Handler(), path=directory, recursive=False
+                )
                 observers[directory].start()
     from time import sleep
 
@@ -410,11 +462,6 @@ def main(args,alias):
             observer.stop()
         del sleep
         return
-    
-
-                                        
-
-
 
     """
     observers= []
@@ -476,12 +523,15 @@ def main(args,alias):
     from time import sleep
     sleep(10**9)
         """
+
+
 if __name__ == "__main__":
     alias = {
-        "exec_once":"exec-once",
-        "input_field":"input-field",
+        "exec_once": "exec-once",
+        "input_field": "input-field",
     }
     import sys
+
     args = sys.argv[1:]
     del sys
-    main(args,alias)
+    main(args, alias)
