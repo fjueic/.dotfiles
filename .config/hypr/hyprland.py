@@ -1,6 +1,6 @@
 from Hyprlang import *
 
-output = "~/.config/hypr/hyprland.conf"
+output = "hyprland.conf"
 raw_text = "source = ./wallust.conf"
 
 monitor = "eDP-1", "1920x1080", "0x0", "1"
@@ -34,9 +34,9 @@ cursor = {
 }
 
 general = {
-    "gaps_in": "0",
-    "gaps_out": "0",
-    "border_size": 1,
+    "gaps_in": "4",
+    "gaps_out": "4",
+    "border_size": 2,
     # "col.active_border": Gradient(
     #     RGBA(255, 192, 203, 0.93).hex(), RGBA(255, 255, 51, 0.93).hex(), 45
     # ),
@@ -47,7 +47,7 @@ general = {
     "resize_on_border": 1,
 }
 decoration = {
-    "rounding": 0,
+    "rounding": 4,
     "blur": {
         "enabled": 1,
         "size": 3,
@@ -57,10 +57,11 @@ decoration = {
     # "screen_shader": "~/.config/hypr/shaders/bluelight.frag",
     # "screen_shader": "~/.config/hypr/shaders/crt.frag",
     # "screen_shader": "~/.config/hypr/shaders/test.frag",
+    # "screen_shader": "~/.config/hypr/shaders/t1.frag",
 }
 
 animations = {
-    "enabled": 0,
+    "enabled": 1,
     # Animation curves
     "bezier": [
         ("linear", 0, 0, 1, 1),
@@ -105,6 +106,3 @@ misc = {
 ecosystem = {"no_update_news": 1}
 
 
-source = "./binds.py"
-source = "./ExecOnce.py"
-source = "./rules.py"

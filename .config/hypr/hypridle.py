@@ -1,4 +1,4 @@
-output="~/.config/hypr/hypridle.conf"
+output="hypridle.conf"
 _lock_cmd = "pidof hyprlock ||  hyprlock"
 _unlock_cmd = "pkill -USR1 hyprlock"
 general={

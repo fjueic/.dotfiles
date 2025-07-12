@@ -1,3 +1,4 @@
+output = "binds.conf"
 from hypridle import _lock_cmd
 from Hyprlang import Vec2
 
@@ -117,6 +118,10 @@ bindm = _mainMod, "mouse:273", "resizewindow"
 # Brightness and volume controls
 bindel = "", "XF86MonBrightnessUp", _exec, "brightnessctl set +10%"
 bindel = "", "XF86MonBrightnessDown", _exec, "brightnessctl set 10%-"
+# submap = "brightness"
+# bind = _mainMod, "B", "submap", "brightnessctl"
+# bindel = _mainMod, "XF86MonBrightnessUp", _exec, "hyprctl hyprsunset gamma +10"
+# bindel = _mainMod, "XF86MonBrightnessDown", _exec, "hyprctl hyprsunset gamma -10"
 bindel = "", "XF86AudioRaiseVolume", _exec, "pamixer -i 5"
 bindel = "", "XF86AudioLowerVolume", _exec, "pamixer -d 5"
 bindel = "", "XF86AudioMute", _exec, "pamixer -t"

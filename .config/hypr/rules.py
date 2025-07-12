@@ -1,3 +1,4 @@
+output = "rules.conf"
 # layerrule = "blur", "waybar"
 layerrule = "ignorezero", "waybar"
 layerrule = "blurpopups", "waybar"

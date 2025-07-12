@@ -1,5 +1,5 @@
 from Hyprlang import RGBA
-output="~/.config/hypr/hyprlock.conf"
+output="hyprlock.conf"
 
 _text_color = RGBA(255, 255, 255, 1)
 _monitor = {"monitor": [""]}

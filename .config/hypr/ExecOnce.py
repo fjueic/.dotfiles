@@ -1,3 +1,4 @@
+output = "exec_once.conf"
 # lock on boot
 exec_once="(hyprlock || hyprctl dispatch exit)"
 # create virtual monitor
@@ -21,8 +22,8 @@ exec_once="~/.config/hypr/script/power_plug_in_and_out.py"
 # battery monitor
 exec_once="~/.config/hypr/script/monitor_battery.py"
 # clipboard manager
-exec_once="wl-paste --type text --watch cliphist store"
-exec_once="wl-paste --type image --watch cliphist store"
+# exec_once="wl-paste --type text --watch cliphist store"
+# exec_once="wl-paste --type image --watch cliphist store"
 # cron job
 exec_once="~/.config/hypr/script/cron_job.py"
 # syncthing

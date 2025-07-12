@@ -168,3 +168,12 @@ alias firefox-here="firefox --new-window $(pwd)"
 
 bind '"\C-f":"tmux-sessionizer.sh\n"'
 
+
+
+# Start ssh-agent if not running and add SSH keys
+if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l &>/dev/null; then
+  eval "$(ssh-agent -s)" > /dev/null
+  ssh-add ~/.ssh/id_ed25519 2>/dev/null
+  ssh-add ~/.ssh/id_ed25519_gitlab_osmosys 2>/dev/null
+fi
+
